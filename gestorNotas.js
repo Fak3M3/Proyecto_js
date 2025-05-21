@@ -33,7 +33,7 @@ function agregarNota(titulo, contenido) {
 /**
  * Lista todas las notas guardadas.
  */
-function listarNotas(filePath) {
+function listarNotas() {
   if (fs.existsSync(filePath)) {
     const json1 = fs.readFileSync(filePath,'utf-8');
     console.log(JSON.parse(json1)); 
