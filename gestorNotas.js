@@ -13,13 +13,20 @@ function agregarNota(titulo, contenido) {
   if (fs.existsSync(filePath)) {
     // PISTA: Aquí debes leer las notas existentes antes de agregar la nueva.
     // COMPLETAR: Usa fs.readFileSync para leer el archivo.
+    const nota = fs.readFileSync(filePath, 'utf8');
+    notas = JSON.parse(nota);
   }
-
+  const existe = notas.some(nota => nota.titulo === titulo);
+  if (existe) {
+    console.log(`Ya existe una nota con el título "${titulo}". Usa otro título para que se guarde.`);
+    return;
+  }
   const nuevaNota = { titulo, contenido };
   notas.push(nuevaNota);
 
   // PISTA: Ahora debes sobrescribir el archivo con las notas actualizadas.
   // COMPLETAR: Usa fs.writeFileSync para guardar las notas.
+  fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
   console.log('Nota agregada con éxito.');
 }
 
@@ -57,6 +64,8 @@ function eliminarNota(titulo) {
 
 // Ejecución de ejemplo
 agregarNota('Compras', 'Comprar leche y pan.');
+agregarNota('Tareas', 'Sacar a pasear al perro.');
+agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
 listarNotas();
 eliminarNota('Compras');
 
