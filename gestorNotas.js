@@ -13,7 +13,7 @@ function agregarNota(titulo, contenido) {
   if (fs.existsSync(filePath)) {
     // PISTA: Aquí debes leer las notas existentes antes de agregar la nueva.
     // COMPLETAR: Usa fs.readFileSync para leer el archivo.
-    const nota = fs.readFileSync(filePath, 'utf8');
+    const nota = fs.readFileSync(filePath, 'utf-8');
     notas = JSON.parse(nota);
   }
   const existe = notas.some(nota => nota.titulo === titulo);
@@ -35,7 +35,7 @@ function agregarNota(titulo, contenido) {
  */
 function listarNotas(filePath) {
   if (fs.existsSync(filePath)) {
-    const json1 = fs.readFileSync('./notas.json','utf-8');
+    const json1 = fs.readFileSync(filePath,'utf-8');
     console.log(JSON.parse(json1)); 
     // PISTA: Debes leer y parsear el contenido del archivo.
     // COMPLETAR: Usa fs.readFileSync para leer y JSON.parse para convertir el contenido.
