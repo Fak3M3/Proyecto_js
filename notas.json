@@ -1,0 +1,14 @@
+[
+  {
+    "titulo": "Tareas",
+    "contenido": "Sacar a pasear al perro."
+  },
+  {
+    "titulo": "Compras",
+    "contenido": "Comprar leche y pan."
+  },
+  {
+    "titulo": "Recordatorio",
+    "contenido": "Estudiar para el examen del lunes."
+  }
+]

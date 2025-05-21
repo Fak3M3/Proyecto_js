@@ -48,14 +48,20 @@ function listarNotas() {
  */
 function eliminarNota(titulo) {
   if (fs.existsSync(filePath)) {
-    // PISTA: Primero lee todas las notas.
-    // COMPLETAR: Usa fs.readFileSync para leer el archivo.
+    const data = fs.readFileSync(filePath, 'utf8');
+    let notas = JSON.parse(data);
 
-    // PISTA: Filtra las notas y elimina la que coincida con el título.
-    // COMPLETAR: Usa Array.filter para obtener las notas restantes.
+    // Filtrar las notas y eliminar la que coincida con el título
+    const notasRestantes = notas.filter(nota => nota.titulo !== titulo);
 
-    // PISTA: Sobrescribe el archivo con las notas actualizadas.
-    // COMPLETAR: Usa fs.writeFileSync.
+    // Verificar si el archivo ya está vacío después de eliminar la nota
+    if (notasRestantes.length === 0) {
+      console.log('No hay notas para eliminar.');
+      return; // No se realiza la escritura porque el archivo quedaría vacío
+    }
+
+    // Sobrescribir el archivo con las notas restantes
+    fs.writeFileSync(filePath, JSON.stringify(notasRestantes, null, 2));
     console.log(`Nota con título "${titulo}" eliminada.`);
   } else {
     console.log('No hay notas para eliminar.');
@@ -68,6 +74,11 @@ agregarNota('Tareas', 'Sacar a pasear al perro.');
 agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
 listarNotas();
 eliminarNota('Compras');
+eliminarNota(`Recordatorio`);
+agregarNota('Compras', 'Comprar leche y pan.');
+agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
+
+
 
 // ### Pistas para Resolver el Proyecto ###
 // Formato del archivo `notas.json`:
