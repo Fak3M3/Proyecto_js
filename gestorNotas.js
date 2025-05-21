@@ -13,12 +13,12 @@ function agregarNota(titulo, contenido) {
   if (fs.existsSync(filePath)) {
     // PISTA: Aquí debes leer las notas existentes antes de agregar la nueva.
     // COMPLETAR: Usa fs.readFileSync para leer el archivo.
-    const nota = fs.readFileSync(filePath, 'utf8');
+    const nota = fs.readFileSync(filePath, 'utf-8');
     notas = JSON.parse(nota);
   }
   const existe = notas.some(nota => nota.titulo === titulo);
   if (existe) {
-    console.log(`Ya existe una nota con el título "${titulo}". Usa otro título para que se guarde.`);
+    console.log(`\nYa existe una nota con el título "${titulo}". Usa otro título para que se guarde.\n`);
     return;
   }
   const nuevaNota = { titulo, contenido };
@@ -27,7 +27,7 @@ function agregarNota(titulo, contenido) {
   // PISTA: Ahora debes sobrescribir el archivo con las notas actualizadas.
   // COMPLETAR: Usa fs.writeFileSync para guardar las notas.
   fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
-  console.log('Nota agregada con éxito.');
+  console.log('\nNota agregada con éxito.\n');
 }
 
 /**
@@ -35,10 +35,12 @@ function agregarNota(titulo, contenido) {
  */
 function listarNotas() {
   if (fs.existsSync(filePath)) {
+    const json1 = fs.readFileSync(filePath,'utf-8');
+    console.log(JSON.parse(json1)); 
     // PISTA: Debes leer y parsear el contenido del archivo.
     // COMPLETAR: Usa fs.readFileSync para leer y JSON.parse para convertir el contenido.
   } else {
-    console.log('No hay notas guardadas.');
+    console.log('\nNo hay notas guardadas.\n');
   }
 }
 
@@ -47,26 +49,31 @@ function listarNotas() {
  * @param {string} titulo - El título de la nota a eliminar.
  */
 function eliminarNota(titulo) {
+  if (!titulo) {
+    console.log("\nDebes proporcionar un título para eliminar la nota.\n");
+    return;
+  }
   if (fs.existsSync(filePath)) {
     const data = fs.readFileSync(filePath, 'utf8');
     let notas = JSON.parse(data);
 
-    // Filtrar las notas y eliminar la que coincida con el título
     const notasRestantes = notas.filter(nota => nota.titulo !== titulo);
 
-    // Verificar si el archivo ya está vacío después de eliminar la nota
-    if (notasRestantes.length === 0) {
-      console.log('No hay notas para eliminar.');
-      return; // No se realiza la escritura porque el archivo quedaría vacío
+    if (notasRestantes.length === notas.length) {
+      // No se encontró ninguna nota con ese título
+      console.log(`\nNo se encontró ninguna nota con el título "${titulo}".\n`);
+      return;
     }
 
-    // Sobrescribir el archivo con las notas restantes
+    // Sobrescribir el archivo, aunque quede vacío
     fs.writeFileSync(filePath, JSON.stringify(notasRestantes, null, 2));
-    console.log(`Nota con título "${titulo}" eliminada.`);
+
+    console.log(`\nNota con el título "${titulo}" eliminada.\n`);
   } else {
-    console.log('No hay notas para eliminar.');
+    console.log('\nNo hay notas para eliminar.\n');
   }
 }
+
 
 // Ejecución de ejemplo
 agregarNota('Compras', 'Comprar leche y pan.');
@@ -75,8 +82,9 @@ agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
 listarNotas();
 eliminarNota('Compras');
 eliminarNota(`Recordatorio`);
-agregarNota('Compras', 'Comprar leche y pan.');
-agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
+listarNotas();
+agregarNota('Ejercicio', '3 sets de entrenamiento con kary');
+listarNotas();
 
 
 
@@ -87,13 +95,13 @@ agregarNota('Recordatorio', 'Estudiar para el examen del lunes.');
   { "titulo": "Trabajo", "contenido": "Terminar reporte semanal." }
 ]
 
-// #### Operaciones clave: ###
-// 1. Para leer las notas existentes:
-const data = fs.readFileSync(filePath, 'utf8');
-const notas = JSON.parse(data);
+// // #### Operaciones clave: ###
+// // 1. Para leer las notas existentes:
+// const data = fs.readFileSync(filePath, 'utf8');
+// const notas = JSON.parse(data);
 
-// 2. Para guardar las notas actualizadas:
-fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
+// // 2. Para guardar las notas actualizadas:
+// fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
 
-// 3. Filtrar notas para eliminar:
-const notasRestantes = notas.filter((nota) => nota.titulo !== titulo);
+// // 3. Filtrar notas para eliminar:
+// const notasRestantes = notas.filter((nota) => nota.titulo !== titulo);
