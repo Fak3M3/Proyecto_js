@@ -1,13 +1,46 @@
 const fs = require('fs');
+const path = require('path');
 
 // Ruta del archivo de notas
 const filePath = './notas.json';
+const logPath = path.join(__dirname, 'logs.txt');
 
+/**
+ * @param {string} accion - Tipo de acción (inicio, agregar, eliminar).
+ * @param {string} titulo - Título de la nota (si aplica).
+ * @param {string} autor - Quién realizó la acción.
+ */
+function logEvento(accion, titulo = '', autor = 'sistema') {
+  const ahora = new Date();
+  const fecha = ahora.toLocaleDateString('es-MX');
+  const hora = ahora.toLocaleTimeString('es-MX', { hour12: false });
+
+  let mensaje = '';
+
+  switch (accion) {
+    case 'inicio':
+      mensaje = `Se inició el sistema. Autor: ${autor}`;
+      break;
+    case 'agregar':
+      mensaje = `Se agregó la nota "${titulo}". Autor: ${autor}`;
+      break;
+    case 'eliminar':
+      mensaje = `Se eliminó la nota "${titulo}". Autor: ${autor}`;
+      break;
+    default:
+      mensaje = `Acción desconocida "${accion}" realizada. Autor: ${autor}`;
+      break;
+  }
+
+  const linea = `[${fecha} ${hora}] ${mensaje}\n`;
+  fs.appendFileSync(logPath, linea, 'utf8');
+}
 /**
  * Agrega una nueva nota al archivo.
  * @param {string} titulo - El título de la nota.
  * @param {string} contenido - El contenido de la nota.
  */
+logEvento('inicio');
 function agregarNota(titulo, contenido) {
   let notas = [];
   if (fs.existsSync(filePath)) {
@@ -27,6 +60,7 @@ function agregarNota(titulo, contenido) {
   // PISTA: Ahora debes sobrescribir el archivo con las notas actualizadas.
   // COMPLETAR: Usa fs.writeFileSync para guardar las notas.
   fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
+  logEvento('agregar', titulo, 'usuario');
   console.log('\nNota agregada con éxito.\n');
 }
 
@@ -72,6 +106,11 @@ function eliminarNota(titulo) {
   } else {
     console.log('\nNo hay notas para eliminar.\n');
   }
+  logEvento('eliminar', titulo, 'usuario');
+
+}
+function logs(){
+
 }
 
 
@@ -87,21 +126,3 @@ agregarNota('Ejercicio', '3 sets de entrenamiento con kary');
 listarNotas();
 
 
-
-// ### Pistas para Resolver el Proyecto ###
-// Formato del archivo `notas.json`:
-[
-  { "titulo": "Compras", "contenido": "Comprar leche y pan." },
-  { "titulo": "Trabajo", "contenido": "Terminar reporte semanal." }
-]
-
-// // #### Operaciones clave: ###
-// // 1. Para leer las notas existentes:
-// const data = fs.readFileSync(filePath, 'utf8');
-// const notas = JSON.parse(data);
-
-// // 2. Para guardar las notas actualizadas:
-// fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
-
-// // 3. Filtrar notas para eliminar:
-// const notasRestantes = notas.filter((nota) => nota.titulo !== titulo);
