@@ -69,8 +69,9 @@ function agregarNota(titulo, contenido) {
  */
 function listarNotas() {
   if (fs.existsSync(filePath)) {
-    const json1 = fs.readFileSync(filePath,'utf-8');
-    console.log(JSON.parse(json1)); 
+    const lista = fs.readFileSync(filePath,'utf-8');
+    console.log('\nLista de notas:');
+    console.log(JSON.parse(lista)); 
     // PISTA: Debes leer y parsear el contenido del archivo.
     // COMPLETAR: Usa fs.readFileSync para leer y JSON.parse para convertir el contenido.
   } else {
@@ -88,8 +89,8 @@ function eliminarNota(titulo) {
     return;
   }
   if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, 'utf8');
-    let notas = JSON.parse(data);
+    const datos = fs.readFileSync(filePath, 'utf8');
+    let notas = JSON.parse(datos);
 
     const notasRestantes = notas.filter(nota => nota.titulo !== titulo);
 
@@ -109,10 +110,6 @@ function eliminarNota(titulo) {
   logEvento('eliminar', titulo, 'usuario');
 
 }
-function logs(){
-
-}
-
 
 // Ejecución de ejemplo
 agregarNota('Compras', 'Comprar leche y pan.');
